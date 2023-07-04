@@ -1,0 +1,9 @@
+node_modules
+dist/
+createHashFunction.js
+overlapTest.js
+hilbert.js
+*.geojson
+cpp/
+hilbertSphere.json
+junk
