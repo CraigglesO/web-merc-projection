@@ -1,39 +1,50 @@
-export const kLimitIJ = 1 << 30
+export function toID (zoom: number, x: number, y: number): number {
+  return (((1 << zoom) * y + x) * 32) + zoom
+}
+
+export function fromID (id: number): [number, number, number] {
+  const z = id % 32
+  id = (id - z) / 32
+  const x = id % (1 << z)
+  const y = (id - x) / (1 << z)
+
+  return [z, x, y]
+}
+
+// 900913 (Web Mercator) properties.
+export const A = 6378137.0
+export const MAXEXTENT = 20037508.342789244
 
 export type BBox = [number, number, number, number] // left, bottom, right, top
 
-export type XYZ = [number, number, number]
-
-export type Face = 0 | 1 | 2 | 3 | 4 | 5
-
 export type Value = string | number | boolean | null
 
-export type S2Properties = Record<string, Value>
+export type Properties = Record<string, Value>
 
-/** S2 GEOMETRY **/
+export type Sources = '900913' | 'WGS84'
 
-export interface S2FeatureCollection {
-  type: 'S2FeatureCollection'
-  features: S2Feature[]
-  faces: Face[]
+/** GEOMETRY **/
+
+export interface FeatureCollection {
+  type: 'FeatureCollection'
+  features: Feature[]
 }
 
-export interface S2Feature {
-  type: 'S2Feature'
+export interface Feature {
+  type: 'Feature'
   id?: number
-  face: Face
-  properties: S2Properties
-  geometry: S2Geometry
+  properties: Properties
+  geometry: Geometry
 }
 
-export type S2GeometryType =
+export type GeometryType =
   'Point' | 'MultiPoint' | 'LineString' |
   'MultiLineString' | 'Polygon' | 'MultiPolygon'
-export type S2Geometry =
+export type Geometry =
   PointGeometry | MultiPointGeometry | LineStringGeometry |
   MultiLineStringGeometry | PolygonGeometry | MultiPolygonGeometry
 
-// [s, t]
+// [x, y]
 export type Point = [number, number]
 export type MultiPoint = Point[]
 export type LineString = Point[]
