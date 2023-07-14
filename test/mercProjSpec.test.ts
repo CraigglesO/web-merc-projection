@@ -3,13 +3,13 @@ import { describe, test, it, expect } from 'vitest'
 
 describe('managing tile x-y-z to/from ID', () => {
   it('toID', () => {
-    expect(toID(0, 0, 0)).toEqual(0)
-    expect(toID(1, 0, 0)).toEqual(1)
+    expect(toID(0, 0, 0)).toEqual(0n)
+    expect(toID(1, 0, 0)).toEqual(1n)
   })
 
   it('fromID', () => {
-    expect(fromID(0)).toEqual([0, 0, 0])
-    expect(fromID(1)).toEqual([1, 0, 0])
+    expect(fromID(0n)).toEqual([0, 0, 0])
+    expect(fromID(1n)).toEqual([1, 0, 0])
   })
 
   it('toID and fromID random', () => {

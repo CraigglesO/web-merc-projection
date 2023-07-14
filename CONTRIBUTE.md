@@ -44,7 +44,7 @@ You can learn more about the changset system [here](https://github.com/changeset
 However, you can follow the basic guidelines below:
 
 1. Check status with `pnpm changeset status`
-2. Add changes with `pnpm changeset`
+2. Add changes with `pnpm changeset`. You can make changes later inside the .changset folder.
 
 ### Releases
 

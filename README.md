@@ -4,7 +4,7 @@
 [npm-url]: https://npmjs.org/package/web-merc-projection
 [downloads-image]: https://img.shields.io/npm/dm/web-merc-projection.svg
 [downloads-url]: https://www.npmjs.com/package/web-merc-projection
-[bundle-image]: https://badgen.net/bundlephobia/minzip/web-merc-projection
+[bundle-image]: https://badgen.net/bundlephobia/minzip/web-merc-projection@1.0.0.svg
 [bundle-url]: https://bundlephobia.com/package/web-merc-projection
 [tree-shake-image]: https://badgen.net/bundlephobia/tree-shaking/web-merc-projection
 [tree-shake-url]: https://bundlephobia.com/package/web-merc-projection
