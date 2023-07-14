@@ -1,5 +1,11 @@
 # web-merc-projection
 
+## 1.1.1
+
+### Patch Changes
+
+- efb1373: Fix issues with test cases
+
 ## 1.1.0
 
 ### Minor Changes
