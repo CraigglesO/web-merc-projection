@@ -12,10 +12,11 @@ function getCache (zoom: number, tileSize: number): BBox {
   if (zoom < 0 || zoom > 30) throw Error('Invalid zoom level')
   if (isFloat(zoom)) return buildSizes(zoom, tileSize)
   if (CACHE[tileSize] === undefined) CACHE[tileSize] = {}
-  if (!Array.isArray(CACHE[tileSize][zoom])) {
-    CACHE[tileSize][zoom] = buildSizes(zoom, tileSize)
+  const tilesizeCache = CACHE[tileSize] as unknown as Record<number, BBox>
+  if (!Array.isArray(tilesizeCache[zoom])) {
+    tilesizeCache[zoom] = buildSizes(zoom, tileSize)
   }
-  return CACHE[tileSize][zoom]
+  return tilesizeCache[zoom] as BBox
 }
 
 function buildSizes (zoom: number, tileSize: number): BBox {

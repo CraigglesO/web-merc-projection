@@ -37,6 +37,15 @@ There are a few basic ground-rules for contributors:
 4. **Pull requests** are *encouraged* for all contributions to solicit feedback, but left to
    the discretion of the contributor.
 
+### Changeset Guidelines
+
+You can learn more about the changset system [here](https://github.com/changesets/changesets/tree/main).
+
+However, you can follow the basic guidelines below:
+
+1. Check status with `pnpm changeset status`
+2. Add changes with `pnpm changeset`
+
 ### Releases
 
 Declaring formal releases remains the prerogative of the project maintainer.

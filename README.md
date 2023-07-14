@@ -42,6 +42,22 @@ llToPX([-179, 85], 9, false, 256) // [364, 215]
 
 ### Recommended configuration
 
+This project uses PNPM to manage dependencies. It is recommended to [install PNPM](https://pnpm.io/installation) globally and use it to install dependencies.
+
+```bash
+# install directions from https://pnpm.io/installation
+
+# Windows
+iwr https://get.pnpm.io/install.ps1 -useb | iex
+# Posix - curl
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+# Posix - wget
+wget -qO- https://get.pnpm.io/install.sh | sh -
+
+# or just install with npm
+npm install -g pnpm
+```
+
 You may experience issues trying to get linting working in VS Code. The easiest way is to install globally the following packages:
 
 ```bash
@@ -49,6 +65,18 @@ pnpm install -g standard ts-standard
 ```
 
 ---
+
+## Version Control
+
+This project utilizes the [Semantic Versioning 2.0.0](https://semver.org/)
+
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+1. MAJOR version when you make incompatible API changes
+2. MINOR version when you add functionality in a backward compatible manner
+3. PATCH version when you make backward compatible bug fixes
+
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
 ## License
 
