@@ -1,5 +1,11 @@
 # web-merc-projection
 
+## 1.1.2
+
+### Patch Changes
+
+- 53bb23e: adjust changset config for public package
+
 ## 1.1.1
 
 ### Patch Changes
