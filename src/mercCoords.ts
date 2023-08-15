@@ -98,6 +98,9 @@ export function mercToLL (merc: Point): Point {
   return [x, y]
 }
 
+/**
+ * Convert a pixel coordinate to a tile x-y coordinate
+ */
 export function pxToTile (px: Point, tileSize = 512): Point {
   const { floor } = Math
   const x = floor(px[0] / tileSize)
@@ -105,15 +108,21 @@ export function pxToTile (px: Point, tileSize = 512): Point {
   return [x, y]
 }
 
+/**
+ * Convert a tile x-y-z to a bbox of the form `[w, s, e, n]`
+ */
 export function tilePxBounds (tile: [zoom: number, x: number, y: number], tileSize = 512): BBox {
-  const [, x, y] = tile
-  const minX = x * tileSize
-  const minY = y * tileSize
+  const [zoom, x, y] = tile
+  const minX = x * tileSize * Math.pow(2, zoom)
+  const minY = y * tileSize * Math.pow(2, zoom)
   const maxX = minX + tileSize
   const maxY = minY + tileSize
   return [minX, minY, maxX, maxY]
 }
 
+/**
+ * Convert a lat-lon and zoom to the tile's x-y coordinates
+ */
 export function llToTile (ll: Point, zoom: number, tileSize = 512): Point {
   const px = llToPX(ll, zoom, false, tileSize)
   return pxToTile(px, tileSize)
@@ -229,29 +238,35 @@ function circumferenceAtLatitude (latitude: number): number {
   return EARTH_CIRCUMFERENCE * Math.cos(latitude * Math.PI / 180)
 }
 
+/** Convert longitude to mercator projection X-Value */
 export function mercatorXfromLng (lng: number): number {
   return (180 + lng) / 360
 }
 
+/** Convert latitude to mercator projection Y-Value */
 export function mercatorYfromLat (lat: number): number {
   const { PI, log, tan } = Math
   return (180 - (180 / PI * log(tan(PI / 4 + lat * PI / 360)))) / 360
 }
 
+/** Convert altitude to mercator projection Z-Value */
 export function mercatorZfromAltitude (altitude: number, lat: number): number {
   return altitude / circumferenceAtLatitude(lat)
 }
 
+/** Convert mercator projection's X-Value to longitude */
 export function lngFromMercatorX (x: number): number {
   return x * 360 - 180
 }
 
+/** Convert mercator projection's Y-Value to latitude */
 export function latFromMercatorY (y: number): number {
   const { PI, atan, exp } = Math
   const y2 = 180 - y * 360
   return 360 / PI * atan(exp(y2 * PI / 180)) - 90
 }
 
+/** Convert mercator projection's Z-Value to altitude */
 export function altitudeFromMercatorZ (z: number, y: number): number {
   return z * circumferenceAtLatitude(latFromMercatorY(y))
 }
