@@ -11,12 +11,12 @@ function getCache (zoom: number, tileSize: number): BBox {
   if (zoom < 0 || zoom > 30) throw Error('Invalid zoom level')
   if (isFloat(zoom)) return buildSizes(zoom, tileSize)
   if (CACHE[tileSize] === undefined) CACHE[tileSize] = {}
-  // @ts-expect-error - we know this is NOT defined
+  // @ts-expect-error - we know this is NOT undefined
   if (!Array.isArray(CACHE[tileSize][zoom])) {
-    // @ts-expect-error - we know this is NOT defined
+    // @ts-expect-error - we know this is NOT undefined
     CACHE[tileSize][zoom] = buildSizes(zoom, tileSize)
   }
-  // @ts-expect-error - we know this is NOT defined
+  // @ts-expect-error - we know this is NOT undefined
   return CACHE[tileSize][zoom]
 }
 
@@ -112,9 +112,9 @@ export function pxToTile (px: Point, tileSize = 512): Point {
  * Convert a tile x-y-z to a bbox of the form `[w, s, e, n]`
  */
 export function tilePxBounds (tile: [zoom: number, x: number, y: number], tileSize = 512): BBox {
-  const [zoom, x, y] = tile
-  const minX = x * tileSize * Math.pow(2, zoom)
-  const minY = y * tileSize * Math.pow(2, zoom)
+  const [, x, y] = tile
+  const minX = x * tileSize
+  const minY = y * tileSize
   const maxX = minX + tileSize
   const maxY = minY + tileSize
   return [minX, minY, maxX, maxY]

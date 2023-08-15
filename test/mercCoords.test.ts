@@ -213,3 +213,77 @@ describe('llToTilePx', () => {
     expect(tileOffset11).toEqual([0, 0])
   })
 })
+
+test('llToMerc', () => {
+  expect(llToMerc([0, 0])).toEqual([0, -7.081154551613622e-10])
+  expect(llToMerc([-180, 90])).toEqual([-20037508.34278924, 20037508.342789244])
+  expect(llToMerc([180, -90])).toEqual([20037508.34278924, -20037508.342789244])
+})
+
+test('mercToLL', () => {
+  expect(mercToLL([0, -7.081154551613622e-10])).toEqual([0, 0])
+  expect(mercToLL([-20037508.34278924, 20037508.342789244])).toEqual([-179.99999999999997, 85.05112877980659])
+  expect(mercToLL([20037508.34278924, -20037508.342789244])).toEqual([179.99999999999997, -85.05112877980659])
+})
+
+test('pxToTile', () => {
+  expect(pxToTile([0, 0])).toEqual([0, 0])
+  expect(pxToTile([600, 2_000])).toEqual([1, 3])
+})
+
+test('tilePxBounds', () => {
+  expect(tilePxBounds([0, 0, 0])).toEqual([0, 0, 512, 512])
+  expect(tilePxBounds([1, 0, 0])).toEqual([0, 0, 512, 512])
+  expect(tilePxBounds([1, 1, 0])).toEqual([512, 0, 1024, 512])
+  expect(tilePxBounds([2, 2, 2])).toEqual([1024, 1024, 1536, 1536])
+})
+
+test('mercatorXfromLng', () => {
+  expect(mercatorXfromLng(0)).toEqual(0.5)
+  expect(mercatorXfromLng(-180)).toEqual(0)
+  expect(mercatorXfromLng(180)).toEqual(1)
+})
+
+test('mercatorYfromLat', () => {
+  expect(mercatorYfromLat(0)).toEqual(0.5)
+  expect(mercatorYfromLat(-85.05112877980659)).toEqual(0.9999999999999999)
+  expect(mercatorYfromLat(85.05112877980659)).toEqual(-7.894919286223336e-17)
+  // out of bounds numbers
+  expect(mercatorYfromLat(90)).toEqual(-5.441549447954536)
+  expect(mercatorYfromLat(-90)).toEqual(Infinity)
+})
+
+test('mercatorZfromAltitude', () => {
+  expect(mercatorZfromAltitude(0, 0)).toEqual(0)
+  expect(mercatorZfromAltitude(1_000_000, 0)).toEqual(0.0249811212145705)
+  expect(mercatorZfromAltitude(1_000_000, 60)).toEqual(0.04996224242914099)
+})
+
+test('lngFromMercatorX', () => {
+  expect(lngFromMercatorX(0.5)).toEqual(0)
+  expect(lngFromMercatorX(0)).toEqual(-180)
+  expect(lngFromMercatorX(1)).toEqual(180)
+})
+
+test('latFromMercatorY', () => {
+  expect(latFromMercatorY(0.5)).toEqual(0)
+  expect(latFromMercatorY(1)).toEqual(-85.05112877980659)
+  expect(latFromMercatorY(0)).toEqual(85.05112877980659)
+  // out of bounds numbers
+  expect(latFromMercatorY(2)).toEqual(-89.99075251648904)
+  expect(latFromMercatorY(-1)).toEqual(89.99075251648904)
+})
+
+test('altitudeFromMercatorZ', () => {
+  expect(altitudeFromMercatorZ(0, 0)).toEqual(0)
+  expect(altitudeFromMercatorZ(0.0249811212145705, 0)).toEqual(86_266.73833405455)
+  expect(altitudeFromMercatorZ(0.04996224242914099, 60)).toEqual(1.224646799147353e-10)
+})
+
+test('mercatorLatScale', () => {
+  expect(mercatorLatScale(0)).toEqual(1)
+  expect(mercatorLatScale(45)).toEqual(1.414213562373095)
+  expect(mercatorLatScale(-45)).toEqual(1.414213562373095)
+  expect(mercatorLatScale(85)).toEqual(11.47371324566986)
+  expect(mercatorLatScale(-85)).toEqual(11.47371324566986)
+})
