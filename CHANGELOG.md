@@ -1,5 +1,12 @@
 # web-merc-projection
 
+## 1.3.2
+
+### Patch Changes
+
+- 0ca1a81: mercCoords full tests
+- f33d0b3: add comments to functions missing them
+
 ## 1.3.1
 
 ### Patch Changes
