@@ -1,4 +1,22 @@
-import { llToPX, pxToLL, convert, xyzToBBOX, bboxToXYZBounds, llToTilePx } from '../src/mercCoords.js'
+import {
+  llToPX,
+  pxToLL,
+  convert,
+  xyzToBBOX,
+  bboxToXYZBounds,
+  llToTilePx,
+  llToMerc,
+  mercToLL,
+  pxToTile,
+  tilePxBounds,
+  mercatorXfromLng,
+  mercatorYfromLat,
+  mercatorZfromAltitude,
+  lngFromMercatorX,
+  latFromMercatorY,
+  altitudeFromMercatorZ,
+  mercatorLatScale
+} from '../src/mercCoords.js'
 import { describe, test, it, expect } from 'vitest'
 
 import type { BBox } from '../src/mercProj.spec.js'

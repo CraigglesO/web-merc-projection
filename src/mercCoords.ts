@@ -119,7 +119,7 @@ export function llToTile (ll: Point, zoom: number, tileSize = 512): Point {
   return pxToTile(px, tileSize)
 }
 
-// given a lon-lat and tile, find the offset in pixels
+/** given a lon-lat and tile, find the offset in pixels */
 export function llToTilePx (ll: Point, tile: [zoom: number, x: number, y: number], tileSize = 512): Point {
   const [zoom, x, y] = tile
   const px = llToPX(ll, zoom, false, tileSize)

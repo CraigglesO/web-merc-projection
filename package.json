@@ -64,6 +64,7 @@
     "lint:fix": "eslint src/ --fix",
     "build": "tsup",
     "types:bundle": "npm run types:build && node scripts/types.mjs",
+    "prepublish": "pnpm run lint+build+test",
     "prepublishOnly": "pnpm run lint+build+test",
     "package-check": "package-check",
     "release": "pnpm run build && changeset publish",

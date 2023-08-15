@@ -14,6 +14,7 @@ export function fromID (idB: bigint): [zoom: number, x: number, y: number] {
   return [z, x, y]
 }
 
+/** Given a tile ID, find the 4 children tile IDs */
 export function children (
   id: bigint
 ): [blID: bigint, brID: bigint, tlID: bigint, trID: bigint] {
@@ -26,8 +27,10 @@ export function children (
   ]
 }
 
-// grab the tiles next to the current tiles zoom-x-y
-// only include adjacent tiles, not diagonal
+/**
+ * grab the tiles next to the current tiles zoom-x-y
+ * only include adjacent tiles, not diagonal
+ */
 export function neighborsXY (
   zoom: number,
   x: number,
@@ -41,11 +44,15 @@ export function neighborsXY (
   return neighbors
 }
 
+/** Given a tileID, find the parent tile */
 export function parent (id: bigint): bigint {
   const [z, x, y] = fromID(id)
   return toID(z - 1, Math.floor(x / 2), Math.floor(y / 2))
 }
 
+/**
+ * convert an id to a zoom-x-y after setting it to a new parent zoom
+ */
 export function toIJ (id: bigint, level?: number | bigint): [zoom: number, i: number, j: number] {
   if (level !== undefined) {
     let [currentZoom] = fromID(id)
@@ -57,6 +64,7 @@ export function toIJ (id: bigint, level?: number | bigint): [zoom: number, i: nu
   return fromID(id)
 }
 
+/** Check if the parentID contains the childID within the sub quads */
 export function contains (parentID: bigint, childID: bigint): boolean {
   const [pz, px, py] = fromID(parentID)
   const [cz, cx, cy] = fromID(childID)
@@ -69,11 +77,13 @@ export function contains (parentID: bigint, childID: bigint): boolean {
   }
 }
 
+/** Given a Tile ID, check if the zoom is 0 or not */
 export function isFace (id: bigint): boolean {
   const [z] = fromID(id)
   return z === 0
 }
 
+/** Get the zoom from the tile ID */
 export function level (id: bigint): number {
   const [z] = fromID(id)
   return z
