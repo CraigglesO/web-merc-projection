@@ -1,7 +1,6 @@
-import { isFloat, degToRad, radToDeg } from './util.js'
-import { A, MAXEXTENT } from './mercProjSpec.js'
+import { A, MAXEXTENT, EARTH_RADIUS, degToRad, isFloat, radToDeg } from './util.js'
 
-import type { Sources, Point, BBox } from './mercProjSpec.js'
+import type { BBox, Point, Sources } from './mercProj.spec.js'
 
 /** CONSTANTS **/
 // { tileSize => { zoom => [Bc, Cc, Zc, Ac] } }
@@ -12,11 +11,13 @@ function getCache (zoom: number, tileSize: number): BBox {
   if (zoom < 0 || zoom > 30) throw Error('Invalid zoom level')
   if (isFloat(zoom)) return buildSizes(zoom, tileSize)
   if (CACHE[tileSize] === undefined) CACHE[tileSize] = {}
-  const tilesizeCache = CACHE[tileSize] as unknown as Record<number, BBox>
-  if (!Array.isArray(tilesizeCache[zoom])) {
-    tilesizeCache[zoom] = buildSizes(zoom, tileSize)
+  // @ts-expect-error - we know this is NOT defined
+  if (!Array.isArray(CACHE[tileSize][zoom])) {
+    // @ts-expect-error - we know this is NOT defined
+    CACHE[tileSize][zoom] = buildSizes(zoom, tileSize)
   }
-  return tilesizeCache[zoom] as BBox
+  // @ts-expect-error - we know this is NOT defined
+  return CACHE[tileSize][zoom]
 }
 
 function buildSizes (zoom: number, tileSize: number): BBox {
@@ -63,10 +64,11 @@ export function pxToLL (
   zoom: number,
   tileSize = 512
 ): Point {
+  const { atan, exp, PI } = Math
   const [Bc, Cc, Zc] = getCache(zoom, tileSize)
   const g = (px[1] - Zc) / (-Cc)
   const lon = (px[0] - Zc) / Bc
-  const lat = radToDeg(2 * Math.atan(Math.exp(g)) - 0.5 * Math.PI)
+  const lat = radToDeg(2 * atan(exp(g)) - 0.5 * PI)
   return [lon, lat]
 }
 
@@ -74,8 +76,9 @@ export function pxToLL (
  * Convert Longitude and Latitude to a mercator x-y coordinates
  */
 export function llToMerc (ll: Point): Point {
+  const { tan, log, PI } = Math
   let x = degToRad(A * ll[0])
-  let y = A * Math.log(Math.tan((Math.PI * 0.25) + degToRad(0.5 * ll[1])))
+  let y = A * log(tan((PI * 0.25) + degToRad(0.5 * ll[1])))
   // if xy value is beyond maxextent (e.g. poles), return maxextent.
   if (x > MAXEXTENT) x = MAXEXTENT
   if (x < -MAXEXTENT) x = -MAXEXTENT
@@ -89,9 +92,40 @@ export function llToMerc (ll: Point): Point {
  * Convert mercator x-y coordinates to Longitude and Latitude
  */
 export function mercToLL (merc: Point): Point {
+  const { atan, exp, PI } = Math
   const x = radToDeg(merc[0] / A)
-  const y = radToDeg((0.5 * Math.PI) - 2 * Math.atan(Math.exp(-merc[1] / A)))
+  const y = radToDeg((0.5 * PI) - 2 * atan(exp(-merc[1] / A)))
   return [x, y]
+}
+
+export function pxToTile (px: Point, tileSize = 512): Point {
+  const { floor } = Math
+  const x = floor(px[0] / tileSize)
+  const y = floor(px[1] / tileSize)
+  return [x, y]
+}
+
+export function tilePxBounds (tile: [zoom: number, x: number, y: number], tileSize = 512): BBox {
+  const [, x, y] = tile
+  const minX = x * tileSize
+  const minY = y * tileSize
+  const maxX = minX + tileSize
+  const maxY = minY + tileSize
+  return [minX, minY, maxX, maxY]
+}
+
+export function llToTile (ll: Point, zoom: number, tileSize = 512): Point {
+  const px = llToPX(ll, zoom, false, tileSize)
+  return pxToTile(px, tileSize)
+}
+
+// given a lon-lat and tile, find the offset in pixels
+export function llToTilePx (ll: Point, tile: [zoom: number, x: number, y: number], tileSize = 512): Point {
+  const [zoom, x, y] = tile
+  const px = llToPX(ll, zoom, false, tileSize)
+  const tileXStart = x * tileSize
+  const tileYStart = y * tileSize
+  return [(px[0] - tileXStart) / tileSize, (px[1] - tileYStart) / tileSize]
 }
 
 /**
@@ -181,4 +215,54 @@ export function bboxToXYZBounds (
   }
 
   return bounds
+}
+
+/**
+ * The average circumference of the world in meters.
+ */
+const EARTH_CIRCUMFERENCE = 2 * Math.PI * EARTH_RADIUS // meters
+
+/**
+ * The circumference at a line of latitude in meters.
+ */
+function circumferenceAtLatitude (latitude: number): number {
+  return EARTH_CIRCUMFERENCE * Math.cos(latitude * Math.PI / 180)
+}
+
+export function mercatorXfromLng (lng: number): number {
+  return (180 + lng) / 360
+}
+
+export function mercatorYfromLat (lat: number): number {
+  const { PI, log, tan } = Math
+  return (180 - (180 / PI * log(tan(PI / 4 + lat * PI / 360)))) / 360
+}
+
+export function mercatorZfromAltitude (altitude: number, lat: number): number {
+  return altitude / circumferenceAtLatitude(lat)
+}
+
+export function lngFromMercatorX (x: number): number {
+  return x * 360 - 180
+}
+
+export function latFromMercatorY (y: number): number {
+  const { PI, atan, exp } = Math
+  const y2 = 180 - y * 360
+  return 360 / PI * atan(exp(y2 * PI / 180)) - 90
+}
+
+export function altitudeFromMercatorZ (z: number, y: number): number {
+  return z * circumferenceAtLatitude(latFromMercatorY(y))
+}
+
+/**
+ * Determine the Mercator scale factor for a given latitude, see
+ * https://en.wikipedia.org/wiki/Mercator_projection#Scale_factor
+ *
+ * At the equator the scale factor will be 1, which increases at higher latitudes.
+ */
+export function mercatorLatScale (lat: number): number {
+  const { cos, PI } = Math
+  return 1 / cos(lat * PI / 180)
 }

@@ -1,7 +1,7 @@
-import { llToPX, pxToLL, convert, xyzToBBOX, bboxToXYZBounds } from '../src/mercCoords.js'
+import { llToPX, pxToLL, convert, xyzToBBOX, bboxToXYZBounds, llToTilePx } from '../src/mercCoords.js'
 import { describe, test, it, expect } from 'vitest'
 
-import type { BBox } from '../src/mercProjSpec.js'
+import type { BBox } from '../src/mercProj.spec.js'
 
 describe('llToPX', () => {
   it('PX with int zoom value converts', () => {
@@ -153,4 +153,45 @@ test('high precision float 512', () => {
 
   expect(round(withInt[0])).toEqual(round(withFloat[0]))
   expect(round(withInt[1])).toEqual(round(withFloat[1]))
+})
+
+describe('llToTilePx', () => {
+  it('0-0-0: center point', () => {
+    const tileOffset = llToTilePx([0, 0], [0, 0, 0], 512)
+    expect(tileOffset).toEqual([0.5, 0.5])
+  })
+
+  it('0-0-0: top left', () => {
+    const tileOffset = llToTilePx([-180, 85.05], [0, 0, 0], 512)
+    expect(tileOffset).toEqual([0, 0])
+  })
+
+  it('0-0-0: top right', () => {
+    const tileOffset = llToTilePx([180, 85.05], [0, 0, 0], 512)
+    expect(tileOffset).toEqual([1, 0])
+  })
+
+  it('0-0-0: bottom right', () => {
+    const tileOffset = llToTilePx([180, -85.05], [0, 0, 0], 512)
+    expect(tileOffset).toEqual([1, 1])
+  })
+
+  it('0-0-0: bottom left', () => {
+    const tileOffset = llToTilePx([-180, -85.05], [0, 0, 0], 512)
+    expect(tileOffset).toEqual([0, 1])
+  })
+
+  it('center for zoom 1 tiles', () => {
+    const tileOffset00 = llToTilePx([0, 0], [1, 0, 0], 512)
+    expect(tileOffset00).toEqual([1, 1])
+
+    const tileOffset10 = llToTilePx([0, 0], [1, 1, 0], 512)
+    expect(tileOffset10).toEqual([0, 1])
+
+    const tileOffset01 = llToTilePx([0, 0], [1, 0, 1], 512)
+    expect(tileOffset01).toEqual([1, 0])
+
+    const tileOffset11 = llToTilePx([0, 0], [1, 1, 1], 512)
+    expect(tileOffset11).toEqual([0, 0])
+  })
 })

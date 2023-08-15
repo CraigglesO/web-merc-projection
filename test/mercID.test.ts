@@ -1,4 +1,4 @@
-import { toID, fromID } from '../src/mercProjSpec.js'
+import { toID, fromID } from '../src/mercID.js'
 import { describe, test, it, expect } from 'vitest'
 
 describe('managing tile x-y-z to/from ID', () => {

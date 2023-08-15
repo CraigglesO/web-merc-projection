@@ -19,3 +19,7 @@ export function degToRad (deg: number): number {
 export function isFloat (n: number): boolean {
   return n % 1 !== 0
 }
+
+// 900913 (Web Mercator) properties.
+export const A = 6378137.0
+export const MAXEXTENT = 20037508.342789244

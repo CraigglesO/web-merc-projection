@@ -1,6 +1,6 @@
 {
   "name": "web-merc-projection",
-  "version": "1.1.2",
+  "version": "1.2.2",
   "description": "Work with the web mercator projection.",
   "keywords": [
     "web",
@@ -64,7 +64,7 @@
     "lint:fix": "eslint src/ --fix",
     "build": "tsup",
     "types:bundle": "npm run types:build && node scripts/types.mjs",
-    "prepublish": "pnpm run lint+build+test",
+    "prepublishOnly": "pnpm run lint+build+test",
     "package-check": "package-check",
     "release": "pnpm run build && changeset publish",
     "test:dev": "vitest dev",
@@ -75,7 +75,7 @@
     "url": "https://github.com/S2-Maps/web-merc-projection"
   },
   "author": "Craig OConnor",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/S2-Maps/web-merc-projection/issues"
   },

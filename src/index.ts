@@ -1,2 +1,2 @@
 export * from './mercCoords.js'
-export * from './mercProjSpec.js'
+export * from './mercProj.spec.js'
