@@ -1,5 +1,11 @@
 # web-merc-projection
 
+## 1.3.0
+
+### Minor Changes
+
+- 8fb4df4: update license. Migrate ID code. Bug fixes. Lint fixes
+
 ## 1.1.2
 
 ### Patch Changes
