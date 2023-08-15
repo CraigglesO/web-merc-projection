@@ -1,5 +1,11 @@
 # web-merc-projection
 
+## 1.3.1
+
+### Patch Changes
+
+- 467bc60: add all tests for mercID
+
 ## 1.3.0
 
 ### Minor Changes
