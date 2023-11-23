@@ -26,18 +26,25 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require":  "./dist/index.cjs"
+    },
     "./mercCoords": {
       "types": "./dist/mercCoords.d.ts",
-      "import": "./dist/mercCoords.js"
+      "import": "./dist/mercCoords.js",
+      "require":  "./dist/mercCoords.cjs"
     },
     "./mercProjSpec": {
       "types": "./dist/mercProjSpec.d.ts",
-      "import": "./dist/mercProjSpec.js"
+      "import": "./dist/mercProjSpec.js",
+      "require":  "./dist/mercProjSpec.cjs"
     },
     "./util": {
       "types": "./dist/util.d.ts",
-      "import": "./dist/util.js"
+      "import": "./dist/util.js",
+      "require":  "./dist/util.cjs"
     }
   },
   "typesVersions": {
