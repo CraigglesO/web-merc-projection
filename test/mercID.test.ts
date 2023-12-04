@@ -32,7 +32,7 @@ describe('managing tile x-y-z to/from ID', () => {
 })
 
 test('toID and fromID for all zooms 1-7', () => {
-  const idCache = new Set()
+  const idCache = new Set<bigint>()
   for (let z = 1; z <= 7; z++) {
     for (let x = 0; x < 2 ** z; x++) {
       for (let y = 0; y < 2 ** z; y++) {
