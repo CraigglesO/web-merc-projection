@@ -1,6 +1,6 @@
 {
   "name": "web-merc-projection",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Work with the web mercator projection.",
   "keywords": [
     "web",
@@ -29,22 +29,22 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require":  "./dist/index.cjs"
+      "require": "./dist/index.cjs"
     },
     "./mercCoords": {
       "types": "./dist/mercCoords.d.ts",
       "import": "./dist/mercCoords.js",
-      "require":  "./dist/mercCoords.cjs"
+      "require": "./dist/mercCoords.cjs"
     },
     "./mercProjSpec": {
       "types": "./dist/mercProjSpec.d.ts",
       "import": "./dist/mercProjSpec.js",
-      "require":  "./dist/mercProjSpec.cjs"
+      "require": "./dist/mercProjSpec.cjs"
     },
     "./util": {
       "types": "./dist/util.d.ts",
       "import": "./dist/util.js",
-      "require":  "./dist/util.cjs"
+      "require": "./dist/util.cjs"
     }
   },
   "typesVersions": {

@@ -1,5 +1,11 @@
 # web-merc-projection
 
+## 1.3.4
+
+### Patch Changes
+
+- 9915e35: update dev dependencies
+
 ## 1.3.2
 
 ### Patch Changes
